@@ -30,11 +30,11 @@ public class FunctionTest
    public void testFuncCompose()
    {
       //given
-      Function<Integer, Integer> abs = (num) -> Math.abs(num);
-      Function<Integer, Integer> sqrt = abs.compose((num) -> num * num);
+      Function<Integer, Integer> sqrt = (num) -> num * num;
+      Function<String, Integer> input = sqrt.compose(((s) -> Integer.parseInt(s)));
 
       //when
-      Integer result = sqrt.apply(-9);
+      Integer result = input.apply("9");
 
       //verify
       Assertions.assertEquals(Integer.valueOf(81), result);
@@ -45,29 +45,25 @@ public class FunctionTest
    public void testFuncAndThen()
    {
       //given
-      Function<Integer, Integer> abs = (num) -> Math.abs(num);
-      Function<Integer, Integer> sqrt = abs.compose((num) -> num * num);
-      Function<Integer, Integer> time = sqrt.andThen((num) -> num * 2);
+      Function<Integer, Integer> sqrt = (num) -> num * num;
+      Function<Integer, Integer> times = sqrt.andThen((num) -> num * num);
+      Function<String, Integer> input = times.compose(((s) -> Integer.parseInt(s)));
 
       //when
-      Integer result = time.apply(10);
+      Integer result = input.apply("10");
 
       //verify
-      Assertions.assertEquals(Integer.valueOf(200), result);
+      Assertions.assertEquals(Integer.valueOf(10000), result);
    }
 
    @Test
    public void testIdentity()
    {
       //given
-      Map<String, String> result = Arrays.asList("a", "b", "c")
-                                      .stream()
-                                      .collect(
-                                         Collectors.toMap(
-                                            Function.identity(),
-                                            str -> str));
-
-
+      Map<String, String> result =
+         Arrays.asList("a", "b", "c")
+            .stream()
+            .collect(Collectors.toMap(Function.identity(), str -> str));
       //verify
       Assertions.assertTrue(result.size() == 3);
       Assertions.assertEquals(result.get("a"), "a");
