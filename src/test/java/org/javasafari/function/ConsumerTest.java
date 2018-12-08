@@ -1,7 +1,10 @@
 package org.javasafari.function;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -13,12 +16,37 @@ import org.junit.jupiter.api.Test;
 public class ConsumerTest
 {
 
+
+   @Test
+   public void testConsumerAccept()
+   {
+      //given
+      List<String> names = new ArrayList();
+      Consumer<String> addStudents = (name) -> names.add(name);
+      //when
+      addStudents.accept("chris");
+      //verify
+      Assertions.assertEquals("chris", names.get(0));
+   }
+
+   @Test
+   public void testConsumerAcceptAndThenPrint()
+   {
+      //given
+      List<String> names = new ArrayList();
+      Consumer<String> addStudent = (name) -> names.add(name);
+      Consumer<String> printStudentAfterAdding = addStudent.andThen(name -> System.out.println("added " + name));
+      //when
+      printStudentAfterAdding.accept("chris");
+      //verify
+      Assertions.assertEquals("chris", names.get(0));
+   }
+
    @Test
    public void testConsumer()
    {
       //given
       Consumer<String> printer = (message) -> System.out.println(message.toUpperCase());
-
       //when
       printer.accept("message!!");
       //verify
@@ -27,10 +55,10 @@ public class ConsumerTest
    @Test
    public void testConsumerThen()
    {
-
       //given
       Consumer<Integer> consumer = i -> System.out.print(i);
       Consumer<Integer> consumerWithAndThen = consumer.andThen(i -> System.out.print(" (after printed *" + i + ")"));
+      //when
       consumerWithAndThen.accept(22);
       //verify
 
