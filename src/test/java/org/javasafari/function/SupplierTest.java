@@ -1,5 +1,6 @@
 package org.javasafari.function;
 
+import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Assertions;
@@ -29,5 +30,15 @@ public class SupplierTest
       Assertions.assertEquals("Hello World", supplier.get());
    }
 
+
+   @Test
+   public void testGetCurrentDate()
+   {
+      //when
+      Supplier<LocalDateTime> dateTimeSupplier = () -> LocalDateTime.now();
+
+      //verify
+      Assertions.assertNotNull(dateTimeSupplier.get());
+   }
 
 }
