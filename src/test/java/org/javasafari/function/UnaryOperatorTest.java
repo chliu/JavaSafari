@@ -18,15 +18,10 @@ public class UnaryOperatorTest
    @Test
    public void testUnaryOperator()
    {
-      //given
-
       //when
-      UnaryOperator<Integer> squared = integer -> integer * integer;
-
+      UnaryOperator<Integer> increment = (n) -> ++n;
       //verify
-      Assertions.assertEquals(Integer.valueOf(4), squared.apply(2));
-      Assertions.assertEquals(Integer.valueOf(9), squared.apply(3));
-      Assertions.assertEquals(Integer.valueOf(16), squared.apply(4));
+      Assertions.assertEquals(Integer.valueOf(2), increment.apply(1));
 
    }
 
