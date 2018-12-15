@@ -1,6 +1,5 @@
 package org.javasafari.util;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -16,48 +15,58 @@ import org.junit.jupiter.api.Test;
  */
 public class OptionalTest
 {
+
    @Test
-   public void testCreateNullObject()
+   public void testCreateNonNullOptional()
    {
-      Assertions.assertEquals(false, Optional.ofNullable(null).isPresent());
-      Assertions.assertEquals("defaultValue", Optional.ofNullable(null).orElse("defaultValue"));
-      Assertions.assertEquals("test", Optional.of("test").get());
+      Optional<String> country = Optional.of("Taiwan");
+      Assertions.assertTrue(country.isPresent());
+      Assertions.assertEquals("Taiwan", country.get());
    }
 
    @Test
-   public void testOrElse()
+   public void testCreateNullValueOptional()
    {
-      Date dateNow = null;
-      Assertions.assertNotNull(Optional.ofNullable(dateNow).orElse(new Date()));
+      Assertions.assertEquals(false, Optional.ofNullable(null).isPresent());
+      Assertions.assertEquals("defaultValue", Optional.ofNullable(null).orElse("defaultValue"));
+   }
+
+   @Test
+   public void testGetElseOption()
+   {
+      Optional<Date> current = Optional.ofNullable(null);
+      Assertions.assertNotNull(current.orElse(new Date()));
    }
 
    @Test
    public void testOrElseGet()
    {
       Date dateNow = null;
-      Assertions.assertNotNull(Optional.ofNullable(dateNow).orElseGet(() -> Calendar.getInstance().getTime()));
+      Assertions.assertNotNull(Optional.ofNullable(dateNow).orElseGet(Date::new));
    }
 
    @Test
    public void testOrElseThrow()
    {
       Date dateNow = null;
-      Assertions.assertThrows(IllegalArgumentException.class, () -> Optional.ofNullable(dateNow).orElseThrow(IllegalArgumentException::new));
+      Assertions.assertThrows(IllegalArgumentException.class,
+         () -> Optional.ofNullable(dateNow).orElseThrow(IllegalArgumentException::new));
    }
 
    @Test
    public void testFilter()
    {
-      Optional<String> country = Optional.of("Taiwan").filter((v) -> v.contains("No.1"));
-      Assertions.assertEquals(Optional.empty(), country);
-      Assertions.assertEquals("input is wrong!!", country.orElse("input is wrong!!"));
+      Optional<String> taipeiCity = Optional.of("Taipei").filter((v) -> v.contains("No.1 City"));
+      Assertions.assertEquals(Optional.empty(), taipeiCity);
 
+      Optional<String> county = Optional.of("Taiwan").filter(v -> v.contains("Taiwan"));
+      Assertions.assertEquals("Taiwan", county.get());
    }
 
    @Test
    public void testFlatMap()
    {
-      String lowerCountryName = Optional.of("Taiwan").flatMap((v) -> Optional.of(v.toLowerCase())).get();
-      Assertions.assertEquals("taiwan", lowerCountryName);
+      Optional<Integer> numOp = Optional.of("111").flatMap(v -> Optional.of(Integer.valueOf(v)));
+      Assertions.assertEquals(Integer.valueOf(111), numOp.get());
    }
 }
